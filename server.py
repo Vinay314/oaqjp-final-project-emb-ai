@@ -1,3 +1,8 @@
+"""
+This module provides a Flask application for emotion detection
+based on user-provided text input.
+"""
+
 from flask import Flask, render_template, request, jsonify
 from EmotionDetection.emotion_detection import detect_emotion, extract_emotions
 
@@ -5,11 +10,12 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
+    """Render the home page."""
     return render_template('index.html')
 
 @app.route('/emotionDetector', methods=['POST'])
-@app.route('/emotionDetector', methods=['POST'])
 def emotion_detector():
+    """Detect emotions from the given statement."""
     # Get the statement from the form submission
     statement = request.form.get('statement')
 
@@ -26,7 +32,6 @@ def emotion_detector():
 
     # Detect emotions in the given statement
     emotion_response = detect_emotion(statement)
-    
     if emotion_response:
         # Extract emotions
         emotions = extract_emotions(emotion_response)
@@ -34,7 +39,6 @@ def emotion_detector():
         # Check if dominant emotion is None
         if emotions['dominant_emotion'] is None:
             return jsonify({'output': 'Invalid text! Please try again!'}), 400
-        
         # Format the output as requested
         output = (
             f"For the given statement, the system response is "
@@ -45,11 +49,7 @@ def emotion_detector():
             f"'sadness': {emotions['sadness']}. "
             f"The dominant emotion is {emotions['dominant_emotion']}."
         )
-        
         return jsonify({'output': output})
-    else:
-        return jsonify({'output': 'Failed to detect emotions.'}), 500
-
-
+    return jsonify({'output': 'Failed to detect emotions.'}), 500
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
