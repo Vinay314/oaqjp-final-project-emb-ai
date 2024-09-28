@@ -8,7 +8,7 @@ let RunSentimentAnalysis = () => {
                 const response = JSON.parse(xhttp.responseText);
                 document.getElementById("system_response").innerHTML = response.output;
             } else {
-                document.getElementById("system_response").innerHTML = 'Error: Unable to analyze sentiment.';
+                document.getElementById("system_response").innerHTML = 'Invalid text! Please try again!';
             }
         }
     };
